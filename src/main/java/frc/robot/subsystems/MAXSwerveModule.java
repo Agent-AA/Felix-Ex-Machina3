@@ -47,7 +47,7 @@ public class MAXSwerveModule {
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
     m_turningEncoder = new CANcoder(turningEncoderCANId); // this is the absolute encoder, not the relative one.
-    
+
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
 
@@ -99,9 +99,6 @@ public class MAXSwerveModule {
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition().getValueAsDouble());
     m_drivingEncoder.setPosition(0);
-
-    // Display actual offsets
-    System.out.println("Angular Offset (radians) for CAN ID " + turningCANId + ": " + getPosition().angle);
   }
 
   /**
@@ -150,6 +147,15 @@ public class MAXSwerveModule {
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
     m_desiredState = desiredState;
+  }
+
+  /**
+   * Gets the desired state for the module
+   *
+   * @return Desired state with speed and angle.
+   */
+  public SwerveModuleState getDesiredState() {
+    return m_desiredState;
   }
 
   /** Zeroes all the SwerveModule encoders. */

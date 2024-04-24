@@ -14,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
@@ -48,6 +50,11 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(20);
 
+  // MAXSwerve NetworkTables publisher; the first publishes the setpoints and the second publishes the actual values
+  private final StructArrayPublisher<SwerveModuleState> setPointsPublisher;
+  // TODO currently the m_driveEncoders don't work, so the actualValuesPublisher will only report angles
+  private final StructArrayPublisher<SwerveModuleState> actualValuesPublisher;
+
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -70,6 +77,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+
+     // Start publishing an array of module states with the "/SwerveStates" key
+     setPointsPublisher = NetworkTableInstance.getDefault()
+     .getStructArrayTopic("/SwerveStates/SetPoints", SwerveModuleState.struct).publish();
+     actualValuesPublisher = NetworkTableInstance.getDefault()
+     .getStructArrayTopic("/SwerveStates/ActualValues", SwerveModuleState.struct).publish();
   }
 
   @Override
@@ -83,6 +96,21 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+
+    // Periodically publish module states to NetworkTables
+    setPointsPublisher.set(new SwerveModuleState[] {
+      m_frontLeft.getDesiredState(),
+      m_frontRight.getDesiredState(),
+      m_rearLeft.getDesiredState(),
+      m_rearRight.getDesiredState()
+    });
+    
+    actualValuesPublisher.set(new SwerveModuleState[] {
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    });
   }
 
   /**
