@@ -54,6 +54,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final StructArrayPublisher<SwerveModuleState> setPointsPublisher;
   // TODO currently the m_driveEncoders don't work, so the actualValuesPublisher will only report angles
   private final StructArrayPublisher<SwerveModuleState> actualValuesPublisher;
+  private final StructArrayPublisher<Rotation2d> gyroAnglePublisher;
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -78,11 +79,13 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
 
-     // Start publishing an array of module states with the "/SwerveStates" key
+     // Start publishing various values to NetworkTables
      setPointsPublisher = NetworkTableInstance.getDefault()
      .getStructArrayTopic("/SwerveStates/SetPoints", SwerveModuleState.struct).publish();
      actualValuesPublisher = NetworkTableInstance.getDefault()
      .getStructArrayTopic("/SwerveStates/ActualValues", SwerveModuleState.struct).publish();
+     gyroAnglePublisher = NetworkTableInstance.getDefault()
+     .getStructArrayTopic("/GyroAngle", Rotation2d.struct).publish();
   }
 
   @Override
@@ -97,19 +100,23 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
-    // Periodically publish module states to NetworkTables
+    // Periodically publish module states and gyro angle to NetworkTables
     setPointsPublisher.set(new SwerveModuleState[] {
       m_frontLeft.getDesiredState(),
       m_frontRight.getDesiredState(),
       m_rearLeft.getDesiredState(),
       m_rearRight.getDesiredState()
     });
-    
+
     actualValuesPublisher.set(new SwerveModuleState[] {
       m_frontLeft.getState(),
       m_frontRight.getState(),
       m_rearLeft.getState(),
       m_rearRight.getState()
+    });
+
+    gyroAnglePublisher.set(new Rotation2d[] {
+      Rotation2d.fromDegrees(m_gyro.getAngle())
     });
   }
 
