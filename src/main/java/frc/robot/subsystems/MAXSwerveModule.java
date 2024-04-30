@@ -48,7 +48,7 @@ public class MAXSwerveModule {
     m_turningSparkMax.setInverted(true);
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
-    m_drivingEncoder = m_drivingSparkMax.getEncoder();
+    m_drivingEncoder = m_drivingSparkMax.getEncoder(); // for some reason this works even though I don't think it should???
     m_turningEncoder = new CANcoder(turningEncoderCANId);
 
     m_drivingPIDController = new PIDController(ModuleConstants.kDrivingP, 0, 0);
