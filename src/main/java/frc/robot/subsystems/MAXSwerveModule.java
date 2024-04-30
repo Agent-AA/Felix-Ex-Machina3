@@ -49,7 +49,7 @@ public class MAXSwerveModule {
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
-    m_turningEncoder = new CANcoder(turningEncoderCANId); // this is the absolute encoder, not the relative one.
+    m_turningEncoder = new CANcoder(turningEncoderCANId);
 
     m_drivingPIDController = new PIDController(ModuleConstants.kDrivingP, 0, 0);
     m_turningPIDController = new PIDController(ModuleConstants.kTurningP, 0, 0);
@@ -91,8 +91,19 @@ public class MAXSwerveModule {
     m_turningSparkMax.burnFlash();
 
     m_chassisAngularOffset = chassisAngularOffset;
-    m_desiredState.angle = new Rotation2d((m_turningEncoder.getPosition().getValueAsDouble() * 2 * Math.PI) % (2 * Math.PI));
+    m_desiredState.angle = getAngle();
     m_drivingEncoder.setPosition(0);
+  }
+
+  /**
+   * Returns the current angle of the module.
+   *
+   * @return The current angle of the module.
+   */
+  public Rotation2d getAngle() {
+    // The encoder's getPosition() method returns total rotations, so we need to
+    // multiply by 2pi to get the angle in radians and then modulo to get the non-cumulative angle.
+    return new Rotation2d(((m_turningEncoder.getPosition().getValueAsDouble() * 2 * Math.PI) % (2 * Math.PI)) - m_chassisAngularOffset);
   }
 
   /**
@@ -103,8 +114,7 @@ public class MAXSwerveModule {
   public SwerveModuleState getState() {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
-    return new SwerveModuleState(m_drivingEncoder.getVelocity(),
-        new Rotation2d(((m_turningEncoder.getPosition().getValueAsDouble() * 2 * Math.PI) % (2 * Math.PI)) - m_chassisAngularOffset));
+    return new SwerveModuleState(m_drivingEncoder.getVelocity(), getAngle());
   }
 
   /**
@@ -116,8 +126,7 @@ public class MAXSwerveModule {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
     return new SwerveModulePosition(
-        m_drivingEncoder.getPosition(),
-        new Rotation2d(((m_turningEncoder.getPosition().getValueAsDouble() * 2 * Math.PI) % (2 * Math.PI)) - m_chassisAngularOffset));
+        m_drivingEncoder.getPosition(), getAngle());
   }
 
   // TODO correct speeds so that they don't only go in the positive direction
@@ -132,12 +141,11 @@ public class MAXSwerveModule {
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
 
     // Optimize the reference state to avoid spinning further than 90 degrees.
-    SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
-        new Rotation2d(((m_turningEncoder.getPosition().getValueAsDouble() * 2 * Math.PI) % (2 * Math.PI)) - m_chassisAngularOffset));
+    SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState, getAngle());
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     m_drivingSparkMax.set(m_drivingPIDController.calculate(getState().speedMetersPerSecond, optimizedDesiredState.speedMetersPerSecond));
-    m_turningSparkMax.set(m_turningPIDController.calculate(getState().angle.getRadians(), optimizedDesiredState.angle.getRadians()));
+    m_turningSparkMax.set(m_turningPIDController.calculate(getAngle().getRadians(), optimizedDesiredState.angle.getRadians()));
 
     m_desiredState = optimizedDesiredState;
   }
