@@ -73,13 +73,6 @@ public class MAXSwerveModule {
     m_drivingPIDController.setI(ModuleConstants.kDrivingI);
     m_drivingPIDController.setD(ModuleConstants.kDrivingD);
 
-
-    // Set the PID gains for the turning motor. Note these are example gains, and you
-    // may need to tune them for your own robot!
-    m_turningPIDController.setP(ModuleConstants.kTurningP);
-    m_turningPIDController.setI(ModuleConstants.kTurningI);
-    m_turningPIDController.setD(ModuleConstants.kTurningD);
-
     m_drivingSparkMax.setIdleMode(ModuleConstants.kDrivingMotorIdleMode);
     m_turningSparkMax.setIdleMode(ModuleConstants.kTurningMotorIdleMode);
     m_drivingSparkMax.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
@@ -129,24 +122,19 @@ public class MAXSwerveModule {
         m_drivingEncoder.getPosition(), getAngle());
   }
 
-  // TODO correct speeds so that they don't only go in the positive direction
   /**
    * Sets the desired state for the module.
    *
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    // Apply chassis angular offset to the desired state.
-    SwerveModuleState correctedDesiredState = new SwerveModuleState();
-    correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
 
     // Optimize the reference state to avoid spinning further than 90 degrees.
-    SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState, getAngle());
+    SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(desiredState, getAngle());
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     m_drivingSparkMax.set(m_drivingPIDController.calculate(getState().speedMetersPerSecond, optimizedDesiredState.speedMetersPerSecond));
     m_turningSparkMax.set(m_turningPIDController.calculate(getAngle().getRadians(), optimizedDesiredState.angle.getRadians()));
-
     m_desiredState = optimizedDesiredState;
   }
 
