@@ -51,8 +51,8 @@ public class MAXSwerveModule {
     m_drivingEncoder = m_drivingSparkMax.getEncoder(); // for some reason this works even though I don't think it should???
     m_turningEncoder = new CANcoder(turningEncoderCANId);
 
-    m_drivingPIDController = new PIDController(ModuleConstants.kDrivingP, 0, 0);
-    m_turningPIDController = new PIDController(ModuleConstants.kTurningP, 0, 0);
+    m_drivingPIDController = new PIDController(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD);
+    m_turningPIDController = new PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD);
 
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,
@@ -120,6 +120,62 @@ public class MAXSwerveModule {
     // relative to the chassis.
     return new SwerveModulePosition(
         m_drivingEncoder.getPosition(), getAngle());
+  }
+
+  /**
+   * Sets the P, I, and D gains for the driving motor.
+   *
+   * @param values The P, I, and D gains for the driving motor.
+   * @throws IllegalArgumentException the values argument does not have exactly 3 elements.
+   */
+  public void setDrivingPIDValues(double[] values) throws IllegalArgumentException {
+
+    if (values.length != 3) throw new IllegalArgumentException("Argument does not have exactly 3 elements.");
+
+    m_drivingPIDController.setP(values[0]);
+    m_drivingPIDController.setI(values[1]);
+    m_drivingPIDController.setD(values[2]);
+  }
+
+  /**
+   * Returns the P, I, and D gains for the driving motor.
+   *
+   * @return The P, I, and D gains for the driving motor.
+   */
+  public double[] getDrivingPIDValues() {
+    return new double[] {
+      m_drivingPIDController.getP(),
+      m_drivingPIDController.getI(),
+      m_drivingPIDController.getD()
+    };
+  }
+
+  /**
+   * Sets the P, I, and D gains for the turning motor.
+   *
+   * @param values The P, I, and D gains for the turning motor.
+   * @throws IllegalArgumentException the values argument does not have exactly 3 elements.
+   */
+  public void setTurningPIDValues(double[] values) throws IllegalArgumentException {
+
+    if (values.length != 3) throw new IllegalArgumentException("Argument does not have exactly 3 elements.");
+
+    m_turningPIDController.setP(values[0]);
+    m_turningPIDController.setI(values[1]);
+    m_turningPIDController.setD(values[2]);
+  }
+
+  /**
+   * Returns the P, I, and D gains for the turning motor.
+   *
+   * @return The P, I, and D gains for the turning motor.
+   */
+  public double[] getTurningPIDValues() {
+    return new double[] {
+      m_turningPIDController.getP(),
+      m_turningPIDController.getI(),
+      m_turningPIDController.getD()
+    };
   }
 
   /**

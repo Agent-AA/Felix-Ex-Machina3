@@ -14,10 +14,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -50,10 +55,45 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(20);
 
-  // MAXSwerve NetworkTables publisher; the first publishes the setpoints and the second publishes the actual values
+  // MAXSwerve NetworkTables publishers for AdvantageScope
   private final StructArrayPublisher<SwerveModuleState> setPointsPublisher;
   private final StructArrayPublisher<SwerveModuleState> actualValuesPublisher;
   private final StructArrayPublisher<Rotation2d> gyroAnglePublisher;
+
+  // Shuffleboard Tab
+  private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+
+  // Shuffleboard PIDController entries
+  private final DoubleEntry drivingPEntry = (DoubleEntry) driveTab
+    .add("Driving P", ModuleConstants.kDrivingP)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+
+  private final DoubleEntry drivingIEntry = (DoubleEntry) driveTab
+    .add("Driving I", ModuleConstants.kDrivingI)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+
+  private final DoubleEntry drivingDEntry = (DoubleEntry) driveTab
+    .add("Driving D", ModuleConstants.kDrivingD)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+
+  private final DoubleEntry turningPEntry = (DoubleEntry) driveTab
+    .add("Turning P", ModuleConstants.kTurningP)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+
+  private final DoubleEntry turningIEntry = (DoubleEntry) driveTab
+    .add("Turning I", ModuleConstants.kTurningI)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+
+  private final DoubleEntry turningDEntry = (DoubleEntry) driveTab
+    .add("Turning D", ModuleConstants.kTurningD)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -78,13 +118,14 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
 
-     // Start publishing various values to NetworkTables
-     setPointsPublisher = NetworkTableInstance.getDefault()
-     .getStructArrayTopic("/SwerveStates/SetPoints", SwerveModuleState.struct).publish();
-     actualValuesPublisher = NetworkTableInstance.getDefault()
-     .getStructArrayTopic("/SwerveStates/ActualValues", SwerveModuleState.struct).publish();
-     gyroAnglePublisher = NetworkTableInstance.getDefault()
-     .getStructArrayTopic("/GyroAngle", Rotation2d.struct).publish();
+    // Start publishing various values to NetworkTables. These are used for visualizing
+    // the swerve module states in AdvantageScope.
+    setPointsPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates/SetPoints", SwerveModuleState.struct).publish();
+    actualValuesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates/ActualValues", SwerveModuleState.struct).publish();
+    gyroAnglePublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/GyroAngle", Rotation2d.struct).publish();
   }
 
   @Override
@@ -99,23 +140,33 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
-    // Periodically publish module states and gyro angle to NetworkTables
+    // Update MAXSwerveModule states for AdvantageScope
     setPointsPublisher.set(new SwerveModuleState[] {
       m_frontLeft.getDesiredState(),
       m_frontRight.getDesiredState(),
       m_rearLeft.getDesiredState(),
       m_rearRight.getDesiredState()
     });
-
     actualValuesPublisher.set(new SwerveModuleState[] {
       m_frontLeft.getState(),
       m_frontRight.getState(),
       m_rearLeft.getState(),
       m_rearRight.getState()
     });
-
     gyroAnglePublisher.set(new Rotation2d[] {
       Rotation2d.fromDegrees(getHeading())
+    });
+
+    // Update MAXSwerveModule PID values from Shuffleboard
+    setDrivingPIDValues(new double[] {
+      drivingPEntry.getAsDouble(),
+      drivingIEntry.getAsDouble(),
+      drivingDEntry.getAsDouble()
+    });
+    setTurningPIDValues(new double[] {
+      turningPEntry.getAsDouble(),
+      turningIEntry.getAsDouble(),
+      turningDEntry.getAsDouble()
     });
   }
 
@@ -279,5 +330,63 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  /**
+   * Returns the P, I, and D gains for the driving motors on the MAXSwerveModules
+   *
+   * @return The P, I, and D gains for the driving motors on the MAXSwerveModules
+   */
+  public double[] getDrivingPIDValues() {
+    // because the PID values are the same for all modules,
+    // we only need to retrieve them from one
+    return m_frontLeft.getDrivingPIDValues();
+  }
+
+  /**
+   * Sets the P, I, and D gains for the driving motors on the MAXSwerveModules
+   *
+   * @param values The P, I, and D gains for the driving motors on the MAXSwerveModules
+   * @throws IllegalArgumentException the values argument does not have exactly 3 elements
+   */
+  public void setDrivingPIDValues(double[] values) throws IllegalArgumentException {
+    // Set the PID values for all modules
+    try {
+      m_frontLeft.setDrivingPIDValues(values);
+      m_frontRight.setDrivingPIDValues(values);
+      m_rearLeft.setDrivingPIDValues(values);
+      m_rearRight.setDrivingPIDValues(values);
+    } catch (IllegalArgumentException e) {
+      throw e;
+    }
+  }
+
+  /**
+   * Returns the P, I, and D gains for the turning motors on the MAXSwerve Modules
+   *
+   * @return The P, I, and D gains for the turning motors on the MAXSwerve Modules
+   */
+  public double[] getTurningPIDValues() {
+    // because the PID values are the same for all modules,
+    // we only need to retrieve them from one
+    return m_frontLeft.getTurningPIDValues();
+  }
+
+  /**
+   * Sets the P, I, and D gains for the turning motors on the MAXSwerveModules
+   *
+   * @param values The P, I, and D gains for the turning motors on the MAXSwerveModules
+   * @throws IllegalArgumentException the values argument does not have exactly 3 elements
+   */
+  public void setTurningPIDValues(double[] values) throws IllegalArgumentException {
+    // Set the PID values for all modules
+    try {
+      m_frontLeft.setTurningPIDValues(values);
+      m_frontRight.setTurningPIDValues(values);
+      m_rearLeft.setTurningPIDValues(values);
+      m_rearRight.setTurningPIDValues(values);
+    } catch (IllegalArgumentException e) {
+      throw e;
+    }
   }
 }
