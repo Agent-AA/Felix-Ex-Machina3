@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -67,31 +69,49 @@ public class DriveSubsystem extends SubsystemBase {
   private final GenericEntry drivingPEntry = driveTab
     .add("Driving P", ModuleConstants.kDrivingP)
     .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0.0, "max", 1.0))
+    .withSize(1, 2)
+    .withPosition(0, 0)
     .getEntry();
 
   private final GenericEntry drivingIEntry = driveTab
     .add("Driving I", ModuleConstants.kDrivingI)
     .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0.0, "max", 1.0))
+    .withSize(1, 2)
+    .withPosition(0, 1)
     .getEntry();
 
   private final GenericEntry drivingDEntry = driveTab
     .add("Driving D", ModuleConstants.kDrivingD)
     .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0.0, "max", 1.0))
+    .withSize(1,2)
+    .withPosition(0,2)
     .getEntry();
 
   private final GenericEntry turningPEntry = driveTab
     .add("Turning P", ModuleConstants.kTurningP)
     .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0.0, "max", 1.0))
+    .withSize(1,2)
+    .withPosition(2,0)
     .getEntry();
 
   private final GenericEntry turningIEntry = driveTab
     .add("Turning I", ModuleConstants.kTurningI)
     .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0.0, "max", 1.0))
+    .withSize(1,2)
+    .withPosition(2,1)
     .getEntry();
 
   private final GenericEntry turningDEntry = driveTab
     .add("Turning D", ModuleConstants.kTurningD)
     .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0.0, "max", 1.0))
+    .withSize(1,2)
+    .withPosition(2,2)
     .getEntry();
 
 
