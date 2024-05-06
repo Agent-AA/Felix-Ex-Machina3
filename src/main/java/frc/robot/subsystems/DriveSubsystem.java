@@ -14,7 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
@@ -64,32 +64,32 @@ public class DriveSubsystem extends SubsystemBase {
   private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
   // Shuffleboard PIDController entries
-  private final DoubleEntry drivingPEntry = (DoubleEntry) driveTab
+  private final GenericEntry drivingPEntry = driveTab
     .add("Driving P", ModuleConstants.kDrivingP)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
 
-  private final DoubleEntry drivingIEntry = (DoubleEntry) driveTab
+  private final GenericEntry drivingIEntry = driveTab
     .add("Driving I", ModuleConstants.kDrivingI)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
 
-  private final DoubleEntry drivingDEntry = (DoubleEntry) driveTab
+  private final GenericEntry drivingDEntry = driveTab
     .add("Driving D", ModuleConstants.kDrivingD)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
 
-  private final DoubleEntry turningPEntry = (DoubleEntry) driveTab
+  private final GenericEntry turningPEntry = driveTab
     .add("Turning P", ModuleConstants.kTurningP)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
 
-  private final DoubleEntry turningIEntry = (DoubleEntry) driveTab
+  private final GenericEntry turningIEntry = driveTab
     .add("Turning I", ModuleConstants.kTurningI)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
 
-  private final DoubleEntry turningDEntry = (DoubleEntry) driveTab
+  private final GenericEntry turningDEntry = driveTab
     .add("Turning D", ModuleConstants.kTurningD)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
@@ -159,14 +159,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Update MAXSwerveModule PID values from Shuffleboard
     setDrivingPIDValues(new double[] {
-      drivingPEntry.getAsDouble(),
-      drivingIEntry.getAsDouble(),
-      drivingDEntry.getAsDouble()
+      drivingPEntry.getDouble(ModuleConstants.kDrivingP),
+      drivingIEntry.getDouble(ModuleConstants.kDrivingI),
+      drivingDEntry.getDouble(ModuleConstants.kDrivingD)
     });
     setTurningPIDValues(new double[] {
-      turningPEntry.getAsDouble(),
-      turningIEntry.getAsDouble(),
-      turningDEntry.getAsDouble()
+      turningPEntry.getDouble(ModuleConstants.kTurningP),
+      turningIEntry.getDouble(ModuleConstants.kTurningI),
+      turningDEntry.getDouble(ModuleConstants.kTurningD)
     });
   }
 
