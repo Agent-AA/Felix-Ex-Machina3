@@ -333,17 +333,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Returns the P, I, and D gains for the driving motors on the MAXSwerveModules
-   *
-   * @return The P, I, and D gains for the driving motors on the MAXSwerveModules
-   */
-  public double[] getDrivingPIDValues() {
-    // because the PID values are the same for all modules,
-    // we only need to retrieve them from one
-    return m_frontLeft.getDrivingPIDValues();
-  }
-
-  /**
    * Sets the P, I, and D gains for the driving motors on the MAXSwerveModules
    *
    * @param values The P, I, and D gains for the driving motors on the MAXSwerveModules
@@ -359,17 +348,6 @@ public class DriveSubsystem extends SubsystemBase {
     } catch (IllegalArgumentException e) {
       throw e;
     }
-  }
-
-  /**
-   * Returns the P, I, and D gains for the turning motors on the MAXSwerve Modules
-   *
-   * @return The P, I, and D gains for the turning motors on the MAXSwerve Modules
-   */
-  public double[] getTurningPIDValues() {
-    // because the PID values are the same for all modules,
-    // we only need to retrieve them from one
-    return m_frontLeft.getTurningPIDValues();
   }
 
   /**

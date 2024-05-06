@@ -138,19 +138,6 @@ public class MAXSwerveModule {
   }
 
   /**
-   * Returns the P, I, and D gains for the driving motor.
-   *
-   * @return The P, I, and D gains for the driving motor.
-   */
-  public double[] getDrivingPIDValues() {
-    return new double[] {
-      m_drivingPIDController.getP(),
-      m_drivingPIDController.getI(),
-      m_drivingPIDController.getD()
-    };
-  }
-
-  /**
    * Sets the P, I, and D gains for the turning motor.
    *
    * @param values The P, I, and D gains for the turning motor.
@@ -163,19 +150,6 @@ public class MAXSwerveModule {
     m_turningPIDController.setP(values[0]);
     m_turningPIDController.setI(values[1]);
     m_turningPIDController.setD(values[2]);
-  }
-
-  /**
-   * Returns the P, I, and D gains for the turning motor.
-   *
-   * @return The P, I, and D gains for the turning motor.
-   */
-  public double[] getTurningPIDValues() {
-    return new double[] {
-      m_turningPIDController.getP(),
-      m_turningPIDController.getI(),
-      m_turningPIDController.getD()
-    };
   }
 
   /**
