@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.Map;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
