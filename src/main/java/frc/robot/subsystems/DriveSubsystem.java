@@ -16,13 +16,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.Dashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
@@ -61,59 +58,6 @@ public class DriveSubsystem extends SubsystemBase {
   private final StructArrayPublisher<SwerveModuleState> setPointsPublisher;
   private final StructArrayPublisher<SwerveModuleState> actualValuesPublisher;
   private final StructArrayPublisher<Rotation2d> gyroAnglePublisher;
-
-  // Shuffleboard Tab
-  private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
-
-  // Shuffleboard PIDController entries
-  private final GenericEntry drivingPEntry = driveTab
-    .add("Driving P", ModuleConstants.kDrivingP)
-    .withWidget(BuiltInWidgets.kNumberSlider)
-    .withProperties(Map.of("min", 0.0, "max", 1.0))
-    .withSize(1, 2)
-    .withPosition(0, 0)
-    .getEntry();
-
-  private final GenericEntry drivingIEntry = driveTab
-    .add("Driving I", ModuleConstants.kDrivingI)
-    .withWidget(BuiltInWidgets.kNumberSlider)
-    .withProperties(Map.of("min", 0.0, "max", 1.0))
-    .withSize(1, 2)
-    .withPosition(0, 1)
-    .getEntry();
-
-  private final GenericEntry drivingDEntry = driveTab
-    .add("Driving D", ModuleConstants.kDrivingD)
-    .withWidget(BuiltInWidgets.kNumberSlider)
-    .withProperties(Map.of("min", 0.0, "max", 1.0))
-    .withSize(1,2)
-    .withPosition(0,2)
-    .getEntry();
-
-  private final GenericEntry turningPEntry = driveTab
-    .add("Turning P", ModuleConstants.kTurningP)
-    .withWidget(BuiltInWidgets.kNumberSlider)
-    .withProperties(Map.of("min", 0.0, "max", 1.0))
-    .withSize(1,2)
-    .withPosition(2,0)
-    .getEntry();
-
-  private final GenericEntry turningIEntry = driveTab
-    .add("Turning I", ModuleConstants.kTurningI)
-    .withWidget(BuiltInWidgets.kNumberSlider)
-    .withProperties(Map.of("min", 0.0, "max", 1.0))
-    .withSize(1,2)
-    .withPosition(2,1)
-    .getEntry();
-
-  private final GenericEntry turningDEntry = driveTab
-    .add("Turning D", ModuleConstants.kTurningD)
-    .withWidget(BuiltInWidgets.kNumberSlider)
-    .withProperties(Map.of("min", 0.0, "max", 1.0))
-    .withSize(1,2)
-    .withPosition(2,2)
-    .getEntry();
-
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -179,14 +123,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Update MAXSwerveModule PID values from Shuffleboard
     setDrivingPIDValues(new double[] {
-      drivingPEntry.getDouble(ModuleConstants.kDrivingP),
-      drivingIEntry.getDouble(ModuleConstants.kDrivingI),
-      drivingDEntry.getDouble(ModuleConstants.kDrivingD)
+      Dashboard.DriveTab.drivePEntry.getDouble(ModuleConstants.kDrivingP),
+      Dashboard.DriveTab.driveIEntry.getDouble(ModuleConstants.kDrivingI),
+      Dashboard.DriveTab.driveDEntry.getDouble(ModuleConstants.kDrivingD)
     });
     setTurningPIDValues(new double[] {
-      turningPEntry.getDouble(ModuleConstants.kTurningP),
-      turningIEntry.getDouble(ModuleConstants.kTurningI),
-      turningDEntry.getDouble(ModuleConstants.kTurningD)
+      Dashboard.DriveTab.turnPEntry.getDouble(ModuleConstants.kTurningP),
+      Dashboard.DriveTab.turnIEntry.getDouble(ModuleConstants.kTurningI),
+      Dashboard.DriveTab.turnDEntry.getDouble(ModuleConstants.kTurningD)
     });
   }
 
