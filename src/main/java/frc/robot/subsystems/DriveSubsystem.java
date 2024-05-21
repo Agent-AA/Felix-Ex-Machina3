@@ -222,8 +222,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
+    double xSpeedDelivered = xSpeedCommanded * getMaxDrivingSpeed();
+    double ySpeedDelivered = ySpeedCommanded * getMaxDrivingSpeed();
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -231,7 +231,7 @@ public class DriveSubsystem extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getHeading()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        swerveModuleStates, getMaxDrivingSpeed());
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -255,7 +255,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        desiredStates, getMaxDrivingSpeed());
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);
@@ -283,6 +283,16 @@ public class DriveSubsystem extends SubsystemBase {
   public double getHeading() {
     // the m_gyro.getAngle() is negative because we need to invert it
     return Rotation2d.fromDegrees(-m_gyro.getAngle()).getDegrees();
+  }
+
+  /**
+   * Returns the max speed of the robot from Shuffleboard. This must be a function because
+   * the value changes in live time.
+   * 
+   * @return the max driving speed of the robot (m/s)
+   */
+  public double getMaxDrivingSpeed() {
+    return Dashboard.DriveTab.maxSpeedEntry.getDouble(DriveConstants.kMaxSpeedMetersPerSecond);
   }
 
   /**
