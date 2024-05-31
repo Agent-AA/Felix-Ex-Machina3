@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.*;
 
 /**
  * This class is used to create the Shuffleboard layout for the robot.
@@ -21,11 +21,20 @@ public class Dashboard {
     public static class DriveTab {
         public static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
 
+        // MAX SPEED CONTROLLER
+        public static final GenericEntry maxSpeedEntry = driveTab
+            .add("Max Speed", DriveConstants.kMaxSpeedMetersPerSecond)
+            .withSize(4,1)
+            .withPosition(0,0) // top left corner
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 10))
+            .getEntry();
+
         // DRIVING PID CONTROLLER LAYOUT
         public static final ShuffleboardLayout drivePIDLayout = driveTab
             .getLayout("Drive PID", BuiltInLayouts.kList)
             .withSize(2,3)
-            .withPosition(0,0) // top left corner
+            .withPosition(0,1) // top left corner under max speed controller
             .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
             // Driving PIDController entries
@@ -51,7 +60,7 @@ public class Dashboard {
         public static final ShuffleboardLayout turnPIDLayout = driveTab
             .getLayout("Turn PID", BuiltInLayouts.kList)
             .withSize(2,3)
-            .withPosition(2,0) // to the right of the drive PID
+            .withPosition(2,1) // to the right of the drive PID and under max speed controller
             .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
             // Turning PIDController entries
