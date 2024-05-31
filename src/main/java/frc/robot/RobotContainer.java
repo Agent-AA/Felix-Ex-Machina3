@@ -109,13 +109,13 @@ public class RobotContainer {
     // so we have to bind the triggers differently
     new Trigger(() -> m_driverController.getLeftTriggerAxis() > .5)
         .whileTrue(new RunCommand(
-            () -> m_robotIntake.activateIntake(1),
+            () -> m_robotIntake.activateIntake(),
             m_robotIntake
         ));
     
     new Trigger(() -> m_driverController.getRightTriggerAxis() > .5)
         .whileTrue(new RunCommand(
-            () -> m_robotShooter.activateShooter(1),
+            () -> m_robotShooter.activateShooter(),
             m_robotShooter
         ));
 

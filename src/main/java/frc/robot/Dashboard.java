@@ -81,5 +81,14 @@ public class Dashboard {
                 .withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1))
                 .getEntry();
+        
+        // Shooting speed entry
+        public static final GenericEntry shootingSpeedEntry = driveTab
+            .add("Shooting Speed", ShootingConstants.kdefaultShootSpeed)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
+            .withPosition(5,0)
+            .withSize(2,1)
+            .getEntry();
     }
 }
