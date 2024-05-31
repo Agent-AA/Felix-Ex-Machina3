@@ -22,6 +22,11 @@ public class ShootingSubsystem extends SubsystemBase {
         m_bottomShooterMotor.set(0);
     }
 
+    public void reverseShooter() {
+        m_topShooterMotor.set(-getShootingSpeed());
+        m_bottomShooterMotor.set(-getShootingSpeed());
+    }
+
     private double getShootingSpeed() {
         return Dashboard.DriveTab.shootingSpeedEntry.getDouble(Constants.ShootingConstants.kdefaultShootSpeed);
     }

@@ -98,13 +98,20 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    // Reverse shooter and intake while left bumper is engaged
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whileTrue(new RunCommand(
+            () -> {m_robotIntake.reverseIntake(); m_robotShooter.reverseShooter();},
+            m_robotIntake, m_robotShooter
+        ));
+
     // Reset gyro by pressing right stick
     new JoystickButton(m_driverController, Button.kRightStick.value)
         .onTrue(new RunCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
 
-    // Left trigger activates intake, right trigger, shooter
+    // Left trigger activates intake, right trigger: intake and shooter
     // For some reason, JoystickButton doesn't recognize the triggers axes,
     // so we have to bind the triggers differently
     new Trigger(() -> m_driverController.getLeftTriggerAxis() > .5)
@@ -115,8 +122,8 @@ public class RobotContainer {
     
     new Trigger(() -> m_driverController.getRightTriggerAxis() > .5)
         .whileTrue(new RunCommand(
-            () -> m_robotShooter.activateShooter(),
-            m_robotShooter
+            () -> {m_robotShooter.activateShooter(); m_robotIntake.activateIntake();} ,
+            m_robotShooter, m_robotIntake
         ));
 
   }

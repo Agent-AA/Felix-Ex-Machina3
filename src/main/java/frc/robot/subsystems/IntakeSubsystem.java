@@ -16,5 +16,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void deactivateIntake() {
         m_intakeMotor.set(0);
         m_loaderMotor.set(0);
-    } 
+    }
+
+    public void reverseIntake() {
+        m_intakeMotor.set(-1);
+        m_intakeMotor.set(-1);
+    }
 }
