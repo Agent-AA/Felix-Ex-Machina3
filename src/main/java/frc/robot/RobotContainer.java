@@ -14,12 +14,15 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.ShootingSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -36,7 +39,10 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   @SuppressWarnings("unused")
-  private final LedSubsystem m_ledSubsystem = new LedSubsystem();
+  private final LedSubsystem m_robotLEDs = new LedSubsystem();
+
+  private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
+  private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -59,7 +65,21 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
+    // Defaults for shooter and intake are to do nothing
+    m_robotIntake.setDefaultCommand(
+    new RunCommand(
+        () -> m_robotIntake.deactivateIntake(),
+        m_robotIntake)
+    );
+    m_robotShooter.setDefaultCommand(
+        new RunCommand(
+            () -> m_robotShooter.deactivateShooter(),
+            m_robotShooter
+        )
+    );
   }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -71,15 +91,33 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    // X-lock while right bumper is engaged
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    // Reset gyro by pressing right stick
     new JoystickButton(m_driverController, Button.kRightStick.value)
         .onTrue(new RunCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
+
+    // Activate intake while left trigger is engaged
+    new JoystickButton(m_driverController, Axis.kLeftTrigger.value)
+        .whileTrue(
+            new RunCommand(
+                () -> m_robotIntake.activateIntake(.5),
+                m_robotIntake
+            ));
+    
+    // Activate shooter while right trigger is engaged
+    new JoystickButton(m_driverController, Axis.kRightTrigger.value)
+        .whileTrue(
+            new RunCommand(
+                () -> m_robotShooter.activateShooter(.5),
+                m_robotShooter
+            ));
   }
 
   /**
