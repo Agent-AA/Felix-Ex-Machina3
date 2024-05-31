@@ -14,7 +14,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -27,6 +26,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
 
 /*
@@ -103,21 +104,21 @@ public class RobotContainer {
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
 
-    // Activate intake while left trigger is engaged
-    new JoystickButton(m_driverController, Axis.kLeftTrigger.value)
-        .whileTrue(
-            new RunCommand(
-                () -> m_robotIntake.activateIntake(.5),
-                m_robotIntake
-            ));
+    // Left trigger activates intake, right trigger, shooter
+    // For some reason, JoystickButton doesn't recognize the triggers axes,
+    // so we have to bind the triggers differently
+    new Trigger(() -> m_driverController.getLeftTriggerAxis() > .5)
+        .whileTrue(new RunCommand(
+            () -> m_robotIntake.activateIntake(1),
+            m_robotIntake
+        ));
     
-    // Activate shooter while right trigger is engaged
-    new JoystickButton(m_driverController, Axis.kRightTrigger.value)
-        .whileTrue(
-            new RunCommand(
-                () -> m_robotShooter.activateShooter(.5),
-                m_robotShooter
-            ));
+    new Trigger(() -> m_driverController.getRightTriggerAxis() > .5)
+        .whileTrue(new RunCommand(
+            () -> m_robotShooter.activateShooter(1),
+            m_robotShooter
+        ));
+
   }
 
   /**
