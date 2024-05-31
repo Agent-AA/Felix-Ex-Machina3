@@ -34,7 +34,7 @@ public class Dashboard {
         public static final ShuffleboardLayout drivePIDLayout = driveTab
             .getLayout("Drive PID", BuiltInLayouts.kList)
             .withSize(2,3)
-            .withPosition(0,1) // top left corner under max speed controller
+            .withPosition(0,0) // top left corner
             .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
             // Driving PIDController entries
