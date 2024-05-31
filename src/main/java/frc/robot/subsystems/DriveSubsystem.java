@@ -17,7 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
+import frc.robot.Dashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -50,7 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(20);
 
-  // MAXSwerve NetworkTables publisher; the first publishes the setpoints and the second publishes the actual values
+  // MAXSwerve NetworkTables publishers for AdvantageScope
   private final StructArrayPublisher<SwerveModuleState> setPointsPublisher;
   private final StructArrayPublisher<SwerveModuleState> actualValuesPublisher;
   private final StructArrayPublisher<Rotation2d> gyroAnglePublisher;
@@ -78,13 +80,14 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
 
-     // Start publishing various values to NetworkTables
-     setPointsPublisher = NetworkTableInstance.getDefault()
-     .getStructArrayTopic("/SwerveStates/SetPoints", SwerveModuleState.struct).publish();
-     actualValuesPublisher = NetworkTableInstance.getDefault()
-     .getStructArrayTopic("/SwerveStates/ActualValues", SwerveModuleState.struct).publish();
-     gyroAnglePublisher = NetworkTableInstance.getDefault()
-     .getStructArrayTopic("/GyroAngle", Rotation2d.struct).publish();
+    // Start publishing various values to NetworkTables. These are used for visualizing
+    // the swerve module states in AdvantageScope.
+    setPointsPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates/SetPoints", SwerveModuleState.struct).publish();
+    actualValuesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates/ActualValues", SwerveModuleState.struct).publish();
+    gyroAnglePublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/GyroAngle", Rotation2d.struct).publish();
   }
 
   @Override
@@ -99,23 +102,33 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
-    // Periodically publish module states and gyro angle to NetworkTables
+    // Update MAXSwerveModule states for AdvantageScope
     setPointsPublisher.set(new SwerveModuleState[] {
       m_frontLeft.getDesiredState(),
       m_frontRight.getDesiredState(),
       m_rearLeft.getDesiredState(),
       m_rearRight.getDesiredState()
     });
-
     actualValuesPublisher.set(new SwerveModuleState[] {
       m_frontLeft.getState(),
       m_frontRight.getState(),
       m_rearLeft.getState(),
       m_rearRight.getState()
     });
-
     gyroAnglePublisher.set(new Rotation2d[] {
       Rotation2d.fromDegrees(getHeading())
+    });
+
+    // Update MAXSwerveModule PID values from Shuffleboard
+    setDrivingPIDValues(new double[] {
+      Dashboard.DriveTab.drivePEntry.getDouble(ModuleConstants.kDrivingP),
+      Dashboard.DriveTab.driveIEntry.getDouble(ModuleConstants.kDrivingI),
+      Dashboard.DriveTab.driveDEntry.getDouble(ModuleConstants.kDrivingD)
+    });
+    setTurningPIDValues(new double[] {
+      Dashboard.DriveTab.turnPEntry.getDouble(ModuleConstants.kTurningP),
+      Dashboard.DriveTab.turnIEntry.getDouble(ModuleConstants.kTurningI),
+      Dashboard.DriveTab.turnDEntry.getDouble(ModuleConstants.kTurningD)
     });
   }
 
@@ -209,8 +222,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
+    double xSpeedDelivered = xSpeedCommanded * getMaxDrivingSpeed();
+    double ySpeedDelivered = ySpeedCommanded * getMaxDrivingSpeed();
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -218,7 +231,7 @@ public class DriveSubsystem extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getHeading()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        swerveModuleStates, getMaxDrivingSpeed());
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -242,7 +255,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        desiredStates, getMaxDrivingSpeed());
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);
@@ -273,11 +286,57 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Returns the max speed of the robot from Shuffleboard. This must be a function because
+   * the value changes in live time.
+   * 
+   * @return the max driving speed of the robot (m/s)
+   */
+  public double getMaxDrivingSpeed() {
+    return Dashboard.DriveTab.maxSpeedEntry.getDouble(DriveConstants.kMaxSpeedMetersPerSecond);
+  }
+
+  /**
    * Returns the turn rate of the robot.
    *
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  /**
+   * Sets the P, I, and D gains for the driving motors on the MAXSwerveModules
+   *
+   * @param values The P, I, and D gains for the driving motors on the MAXSwerveModules
+   * @throws IllegalArgumentException the values argument does not have exactly 3 elements
+   */
+  public void setDrivingPIDValues(double[] values) throws IllegalArgumentException {
+    // Set the PID values for all modules
+    try {
+      m_frontLeft.setDrivingPIDValues(values);
+      m_frontRight.setDrivingPIDValues(values);
+      m_rearLeft.setDrivingPIDValues(values);
+      m_rearRight.setDrivingPIDValues(values);
+    } catch (IllegalArgumentException e) {
+      throw e;
+    }
+  }
+
+  /**
+   * Sets the P, I, and D gains for the turning motors on the MAXSwerveModules
+   *
+   * @param values The P, I, and D gains for the turning motors on the MAXSwerveModules
+   * @throws IllegalArgumentException the values argument does not have exactly 3 elements
+   */
+  public void setTurningPIDValues(double[] values) throws IllegalArgumentException {
+    // Set the PID values for all modules
+    try {
+      m_frontLeft.setTurningPIDValues(values);
+      m_frontRight.setTurningPIDValues(values);
+      m_rearLeft.setTurningPIDValues(values);
+      m_rearRight.setTurningPIDValues(values);
+    } catch (IllegalArgumentException e) {
+      throw e;
+    }
   }
 }
