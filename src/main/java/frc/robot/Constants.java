@@ -127,7 +127,7 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
 
     public static final int kCANdleId = 17;
-    public static final int kNumLeds = 64;
+    public static final int kNumLeds = 128;
   }
 
   public static final class AutoConstants {
