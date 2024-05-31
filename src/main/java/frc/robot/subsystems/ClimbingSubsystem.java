@@ -4,14 +4,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ClimbingSubsystem {
+public class ClimbingSubsystem extends SubsystemBase {
 
-    private final CANSparkMax m_leftClimber = new CANSparkMax(18, MotorType.kBrushless);
-    private final CANSparkMax m_rightClimber = new CANSparkMax(19, MotorType.kBrushless);
+    private final CANSparkMax m_rightClimber = new CANSparkMax(18, MotorType.kBrushless);
+    private final CANSparkMax m_leftClimber = new CANSparkMax(19, MotorType.kBrushless);
 
-    private final DigitalInput m_leftLimitSwitch = new DigitalInput(8);
-    private final DigitalInput m_rightLimitSwitch = new DigitalInput(9);
+    private final DigitalInput m_rightLimitSwitch = new DigitalInput(8);
+    private final DigitalInput m_leftLimitSwitch = new DigitalInput(9);
 
     public void raiseClimbers() {
         m_leftClimber.set(-.75); // left climber is inverted

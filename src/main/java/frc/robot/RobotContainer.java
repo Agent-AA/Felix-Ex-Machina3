@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
@@ -41,9 +42,9 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   @SuppressWarnings("unused")
   private final LedSubsystem m_robotLEDs = new LedSubsystem();
-
   private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
   private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
+  private final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -67,7 +68,7 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    // Defaults for shooter and intake are to do nothing
+    // Defaults for shooter, intake, and climbers are to do nothing
     m_robotIntake.setDefaultCommand(
     new RunCommand(
         () -> m_robotIntake.deactivateIntake(),
@@ -77,6 +78,12 @@ public class RobotContainer {
         new RunCommand(
             () -> m_robotShooter.deactivateShooter(),
             m_robotShooter
+        )
+    );
+    m_robotClimbers.setDefaultCommand(
+        new RunCommand(
+            () -> m_robotClimbers.stopClimbers(),
+            m_robotClimbers
         )
     );
   }
@@ -124,6 +131,20 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> {m_robotShooter.activateShooter(); m_robotIntake.activateIntake();} ,
             m_robotShooter, m_robotIntake
+        ));
+
+    // Up on the POV raises the climbers
+    new Trigger(() -> m_driverController.getPOV() == 0)
+        .whileTrue(new RunCommand(
+            () -> m_robotClimbers.raiseClimbers(),
+            m_robotClimbers
+        ));
+    
+    // Down on the POV lowers the climbers
+    new Trigger(() -> m_driverController.getPOV() == 180)
+        .whileTrue(new RunCommand(
+            () -> m_robotClimbers.lowerClimbers(),
+            m_robotClimbers
         ));
 
   }
