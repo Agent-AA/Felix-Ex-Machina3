@@ -18,12 +18,17 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.ShootingSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
 
 /*
@@ -36,7 +41,10 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   @SuppressWarnings("unused")
-  private final LedSubsystem m_ledSubsystem = new LedSubsystem();
+  private final LedSubsystem m_robotLEDs = new LedSubsystem();
+  private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
+  private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
+  private final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -59,7 +67,27 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
+    // Defaults for shooter, intake, and climbers are to do nothing
+    m_robotIntake.setDefaultCommand(
+    new RunCommand(
+        () -> m_robotIntake.deactivateIntake(),
+        m_robotIntake)
+    );
+    m_robotShooter.setDefaultCommand(
+        new RunCommand(
+            () -> m_robotShooter.deactivateShooter(),
+            m_robotShooter
+        )
+    );
+    m_robotClimbers.setDefaultCommand(
+        new RunCommand(
+            () -> m_robotClimbers.stopClimbers(),
+            m_robotClimbers
+        )
+    );
   }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -71,15 +99,54 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    // X-lock while right bumper is engaged
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    // Reverse shooter and intake while left bumper is engaged
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whileTrue(new RunCommand(
+            () -> {m_robotIntake.reverseIntake(); m_robotShooter.reverseShooter();},
+            m_robotIntake, m_robotShooter
+        ));
+
+    // Reset gyro by pressing right stick
     new JoystickButton(m_driverController, Button.kRightStick.value)
         .onTrue(new RunCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
+
+    // Left trigger activates intake, right trigger: intake and shooter
+    // For some reason, JoystickButton doesn't recognize the triggers axes,
+    // so we have to bind the triggers differently
+    new Trigger(() -> m_driverController.getLeftTriggerAxis() > .5)
+        .whileTrue(new RunCommand(
+            () -> m_robotIntake.activateIntake(),
+            m_robotIntake
+        ));
+    
+    new Trigger(() -> m_driverController.getRightTriggerAxis() > .5)
+        .whileTrue(new RunCommand(
+            () -> {m_robotShooter.activateShooter(); m_robotIntake.activateIntake();} ,
+            m_robotShooter, m_robotIntake
+        ));
+
+    // Up on the POV raises the climbers
+    new Trigger(() -> m_driverController.getPOV() == 0)
+        .whileTrue(new RunCommand(
+            () -> m_robotClimbers.raiseClimbers(),
+            m_robotClimbers
+        ));
+    
+    // Down on the POV lowers the climbers
+    new Trigger(() -> m_driverController.getPOV() == 180)
+        .whileTrue(new RunCommand(
+            () -> m_robotClimbers.lowerClimbers(),
+            m_robotClimbers
+        ));
+
   }
 
   /**

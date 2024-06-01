@@ -5,12 +5,13 @@ import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 /**
  * The LedSubsystem controls the LEDs on the robot.
  */
-public class LedSubsystem {
+public class LedSubsystem extends SubsystemBase {
 
     // Our LED strip
     private final CANdle candle = new CANdle(Constants.OIConstants.kCANdleId);
