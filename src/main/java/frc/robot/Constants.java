@@ -122,6 +122,14 @@ public final class Constants {
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
+  public static final class ClimbConstants {
+    public static final int kRightClimbMotorCanId = 18;
+    public static final int kLeftClimbMotorCanId = 19;
+
+    public static final int kRightLimitSwitchPWMPort = 8;
+    public static final int kLeftLimitSwitchPWMPort = 9;
+  }
+
   public static final class ShootingConstants {
     public static final double kdefaultShootSpeed = .75;
   }
