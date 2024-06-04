@@ -16,8 +16,8 @@ public class ClimbingSubsystem extends SubsystemBase {
     private final DigitalInput m_leftLimitSwitch = new DigitalInput(ClimbConstants.kLeftLimitSwitchPWMPort);
 
     public void raiseClimbers() {
-        m_leftClimber.set(-.75); // left climber is inverted
-        m_rightClimber.set(.75);
+        m_leftClimber.set(-ClimbConstants.kDefaultClimbSpeed); // left climber is inverted
+        m_rightClimber.set(ClimbConstants.kDefaultClimbSpeed);
     }
 
     public void stopClimbers() {
@@ -27,7 +27,7 @@ public class ClimbingSubsystem extends SubsystemBase {
 
     public void lowerClimbers() {
         // as long as the hooks remain clear of the limit switches, they still have room to go down.
-        if (m_leftLimitSwitch.get()) m_leftClimber.set(.75); else m_leftClimber.set(0);
-        if (m_rightLimitSwitch.get()) m_rightClimber.set(-.75); else m_rightClimber.set(0);
+        if (m_leftLimitSwitch.get()) m_leftClimber.set(ClimbConstants.kDefaultClimbSpeed); else m_leftClimber.set(0);
+        if (m_rightLimitSwitch.get()) m_rightClimber.set(-ClimbConstants.kDefaultClimbSpeed); else m_rightClimber.set(0);
     }
 }

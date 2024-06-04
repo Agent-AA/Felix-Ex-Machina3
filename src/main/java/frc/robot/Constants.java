@@ -128,6 +128,8 @@ public final class Constants {
 
     public static final int kRightLimitSwitchPWMPort = 8;
     public static final int kLeftLimitSwitchPWMPort = 9;
+
+    public static final double kDefaultClimbSpeed = .75;
   }
 
   public static final class ShootingConstants {
