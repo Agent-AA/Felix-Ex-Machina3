@@ -121,14 +121,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Update MAXSwerveModule PID values from Shuffleboard
     setDrivingPIDValues(new double[] {
-      Dashboard.DriveTab.drivePEntry.getDouble(ModuleConstants.kDrivingP),
-      Dashboard.DriveTab.driveIEntry.getDouble(ModuleConstants.kDrivingI),
-      Dashboard.DriveTab.driveDEntry.getDouble(ModuleConstants.kDrivingD)
+      Dashboard.MainTab.drivePEntry.getDouble(ModuleConstants.kDrivingP),
+      Dashboard.MainTab.driveIEntry.getDouble(ModuleConstants.kDrivingI),
+      Dashboard.MainTab.driveDEntry.getDouble(ModuleConstants.kDrivingD)
     });
     setTurningPIDValues(new double[] {
-      Dashboard.DriveTab.turnPEntry.getDouble(ModuleConstants.kTurningP),
-      Dashboard.DriveTab.turnIEntry.getDouble(ModuleConstants.kTurningI),
-      Dashboard.DriveTab.turnDEntry.getDouble(ModuleConstants.kTurningD)
+      Dashboard.MainTab.turnPEntry.getDouble(ModuleConstants.kTurningP),
+      Dashboard.MainTab.turnIEntry.getDouble(ModuleConstants.kTurningI),
+      Dashboard.MainTab.turnDEntry.getDouble(ModuleConstants.kTurningD)
     });
   }
 
@@ -292,7 +292,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the max driving speed of the robot (m/s)
    */
   public double getMaxDrivingSpeed() {
-    return Dashboard.DriveTab.maxSpeedEntry.getDouble(DriveConstants.kMaxSpeedMetersPerSecond);
+    return Dashboard.MainTab.maxSpeedEntry.getDouble(DriveConstants.kMaxSpeedMetersPerSecond);
   }
 
   /**

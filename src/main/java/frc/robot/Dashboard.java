@@ -18,11 +18,11 @@ import frc.robot.Constants.*;
  */
 public class Dashboard {
     
-    public static class DriveTab {
-        public static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+    public static class MainTab {
+        public static final ShuffleboardTab mainTab = Shuffleboard.getTab("Main");
 
         // MAX SPEED CONTROLLER
-        public static final GenericEntry maxSpeedEntry = driveTab
+        public static final GenericEntry maxSpeedEntry = mainTab
             .add("Max Speed", DriveConstants.kMaxSpeedMetersPerSecond)
             .withSize(4,1)
             .withPosition(0,0) // top left corner
@@ -31,7 +31,7 @@ public class Dashboard {
             .getEntry();
 
         // DRIVING PID CONTROLLER LAYOUT
-        public static final ShuffleboardLayout drivePIDLayout = driveTab
+        public static final ShuffleboardLayout drivePIDLayout = mainTab
             .getLayout("Drive PID", BuiltInLayouts.kList)
             .withSize(2,3)
             .withPosition(0,1) // top left corner, below max drive speed
@@ -57,7 +57,7 @@ public class Dashboard {
                 .getEntry();
 
         // TURNING PID CONTROLLER LAYOUT
-        public static final ShuffleboardLayout turnPIDLayout = driveTab
+        public static final ShuffleboardLayout turnPIDLayout = mainTab
             .getLayout("Turn PID", BuiltInLayouts.kList)
             .withSize(2,3)
             .withPosition(2,1) // to the right of the drive PID and under max speed controller
@@ -83,7 +83,7 @@ public class Dashboard {
                 .getEntry();
         
         // Shooting speed entry
-        public static final GenericEntry shootingSpeedEntry = driveTab
+        public static final GenericEntry shootingSpeedEntry = mainTab
             .add("Shooting Speed", ShootingConstants.kdefaultShootSpeed)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1))

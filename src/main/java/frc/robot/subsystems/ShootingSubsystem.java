@@ -28,6 +28,6 @@ public class ShootingSubsystem extends SubsystemBase {
     }
 
     private double getShootingSpeed() {
-        return Dashboard.DriveTab.shootingSpeedEntry.getDouble(Constants.ShootingConstants.kdefaultShootSpeed);
+        return Dashboard.MainTab.shootingSpeedEntry.getDouble(Constants.ShootingConstants.kdefaultShootSpeed);
     }
 }
