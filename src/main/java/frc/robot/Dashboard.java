@@ -90,5 +90,14 @@ public class Dashboard {
             .withPosition(5,0)
             .withSize(2,1)
             .getEntry();
+
+        // Climbing speed entry
+        public static final GenericEntry climbingSpeedEntry = mainTab
+            .add("Climbing Speed", ClimbConstants.kDefaultClimbSpeed)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
+            .withPosition(5,1)
+            .withSize(2, 1)
+            .getEntry();
     }
 }
