@@ -84,7 +84,7 @@ public class Dashboard {
         
         // Shooting speed entry
         public static final GenericEntry shootingSpeedEntry = mainTab
-            .add("Shooting Speed", ShootingConstants.kdefaultShootSpeed)
+            .add("Shooting Speed", ShootingConstants.kDefaultShootSpeed)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1))
             .withPosition(5,0)

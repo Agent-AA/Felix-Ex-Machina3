@@ -133,7 +133,7 @@ public final class Constants {
   }
 
   public static final class ShootingConstants {
-    public static final double kdefaultShootSpeed = .75;
+    public static final double kDefaultShootSpeed = .75;
   }
 
   public static final class OIConstants {
