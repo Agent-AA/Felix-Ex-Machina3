@@ -136,6 +136,11 @@ public final class Constants {
     public static final double kDefaultShootSpeed = .75;
   }
 
+  public static final class IntakeConstants {
+    public static final int kIntakeMotorPWMPort = 0;
+    public static final int kLoaderMotorPWMPort = 1;
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
