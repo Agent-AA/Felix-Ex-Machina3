@@ -24,7 +24,6 @@ public class LedSubsystem extends SubsystemBase {
         config.stripType = LEDStripType.RGB;
         config.brightnessScalar = .5; // dim leds to half brightness
         candle.configAllSettings(config);
-        candle.setLEDs(255,255,255); // set to white
 
         setRainbow(); // set to rainbow pattern
     }
@@ -33,11 +32,7 @@ public class LedSubsystem extends SubsystemBase {
      * Sets the LED strip to a dynamic rainbow pattern
      */
     public void setRainbow() {
-
-        // Create a new rainbow animation with max brightness, half speed, and 64 LEDs
         RainbowAnimation rainbowAnim = new RainbowAnimation(1, .5, Constants.OIConstants.kNumLeds);
-
-        // Set the CANdle to the rainbow animation
         candle.animate(rainbowAnim);
     }
 }
