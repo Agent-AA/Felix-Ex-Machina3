@@ -4,10 +4,7 @@ package frc.robot.subsystems.LED;
  * Represents an RGB(W) color that the LEDSubsystem can interpret
  */ 
 public class CANdleColor {
-    public final int r;
-    public final int g;
-    public final int b;
-    public final int w;
+    private final int r, g, b, w;
 
     // if no white color is specified, set it to 0
     public CANdleColor(int r, int g, int b) throws IllegalArgumentException {
@@ -30,5 +27,21 @@ public class CANdleColor {
         this.g = g;
         this.b = b;
         this.w = w;
+    }
+
+    public int getr() {
+        return r;
+    }
+
+    public int getg() {
+        return g;
+    }
+
+    public int getb() {
+        return b;
+    }
+
+    public int getw() {
+        return w;
     }
 }

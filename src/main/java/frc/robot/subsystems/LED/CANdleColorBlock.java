@@ -5,7 +5,7 @@ package frc.robot.subsystems.LED;
  */
 public class CANdleColorBlock extends CANdleColor {
 
-    public final int length;
+    private final int length;
 
     public CANdleColorBlock(int r, int g, int b, int length) {
         super(r, g, b);
@@ -15,5 +15,9 @@ public class CANdleColorBlock extends CANdleColor {
     public CANdleColorBlock(int r, int g, int b, int w, int length) {
         super(r, g, b, w);
         this.length = length;
+    }
+
+    public int getLength() {
+        return length;
     }
 }

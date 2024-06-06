@@ -35,7 +35,7 @@ public class LedSubsystem extends SubsystemBase {
      * @param startIdx the start index for the LED
      */
     public void setColor(CANdleColorBlock colorBlock, int startIdx) {
-        candle.setLEDs(colorBlock.r, colorBlock.g, colorBlock.b, colorBlock.w, startIdx, colorBlock.length);
+        candle.setLEDs(colorBlock.getr(), colorBlock.getg(), colorBlock.getb(), colorBlock.getw(), startIdx, colorBlock.getLength());
     }
 
     /**
@@ -47,7 +47,7 @@ public class LedSubsystem extends SubsystemBase {
      * @param length
      */
     public void setColor(CANdleColor color, int startIdx, int length) {
-        candle.setLEDs(color.r, color.g, color.b, color.w, startIdx, length);
+        candle.setLEDs(color.getr(), color.getg(), color.getb(), color.getw(), startIdx, length);
 
     }
 
@@ -57,7 +57,7 @@ public class LedSubsystem extends SubsystemBase {
      * @param color the CANdle color to set the LEDs to
      */
     public void setSolidColor(CANdleColor color) {
-        candle.setLEDs(color.r, color.g, color.b);
+        candle.setLEDs(color.getr(), color.getg(), color.getb());
     }
 
     /**
@@ -91,7 +91,7 @@ public class LedSubsystem extends SubsystemBase {
         while (blockStartAddress <= Constants.OIConstants.kNumLeds - 1) {
             for (CANdleColorBlock colorBlock: colorBlocks) {
                 setColor(colorBlock, blockStartAddress);
-                blockStartAddress += colorBlock.length;
+                blockStartAddress += colorBlock.getLength();
             }
         }
     }
