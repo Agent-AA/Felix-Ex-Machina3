@@ -19,14 +19,29 @@ public class CANdlePattern {
         frameDelay = frameDelaySeconds;
     }
 
+    /**
+     * Returns the frame delay in seconds
+     * 
+     * @return the frame delay (s)
+     */
     public double getFrameDelay() {
         return frameDelay;
     }
 
+    /**
+     * Returns the entire pattern of colorblocks
+     * 
+     * @return the pattern of colorblocks as an array
+     */
     public CANdleColorBlock[] getPattern() {
         return colorBlocks;
     }
 
+    /**
+     * Returns the color block at the specified index
+     * @param index
+     * @return a color block
+     */
     public CANdleColorBlock getBlock(int index) {
         return colorBlocks[index];
     }

@@ -29,18 +29,38 @@ public class CANdleColor {
         this.w = w;
     }
 
+    /**
+     * Returns the red value between 0 and 255 (inclusive) for the color
+     * 
+     * @return the red value for the color
+     */
     public int getr() {
         return r;
     }
 
+    /**
+     * Returns the green value between 0 and 255 (inclusive) for the color
+     * 
+     * @return the green value for the color
+     */
     public int getg() {
         return g;
     }
 
+    /**
+     * Returns the blue value between 0 and 255 (inclusive) for the color
+     * 
+     * @return the blue value for the color
+     */
     public int getb() {
         return b;
     }
 
+    /**
+     * Returns the white value between 0 and 255 (inclusive) for the color
+     * 
+     * @return the white value for the color
+     */
     public int getw() {
         return w;
     }
