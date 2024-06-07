@@ -21,10 +21,7 @@ public class LedSubsystem extends SubsystemBase {
         config = new CANdleConfiguration();
         config.stripType = LEDStripType.RGB;
         config.brightnessScalar = .5;
-        candle.configAllSettings(config);
-
-        // Set default color (color for disabled)
-        setSolidColor(new CANdleColor(255, 0, 0)); // red
+        candle.configAllSettings(config);   
     }
 
     /**

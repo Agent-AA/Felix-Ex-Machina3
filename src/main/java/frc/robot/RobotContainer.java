@@ -40,8 +40,7 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  @SuppressWarnings("unused")
-  private final LedSubsystem m_robotLEDs = new LedSubsystem();
+  protected final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
   private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
   private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
   private final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
