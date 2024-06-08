@@ -92,4 +92,13 @@ public class LedSubsystem extends SubsystemBase {
             }
         }
     }
+
+    /**
+     * Sets the LED strip to a CANdlePattern. The pattern will repeat
+     * if it doesn't fully cover the LEDs.
+     * @param pattern the CANdlePattern to set the pattern to.
+     */
+    public void setPattern(CANdlePattern pattern) {
+        setPattern(pattern.getPattern());
+    }
 }
