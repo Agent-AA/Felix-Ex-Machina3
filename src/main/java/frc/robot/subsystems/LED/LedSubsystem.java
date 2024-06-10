@@ -13,9 +13,8 @@ import frc.robot.Constants;
 public class LedSubsystem extends SubsystemBase {
 
     // Our LED strip
-    private final CANdle candle = new CANdle(Constants.OIConstants.kCANdleId);
+    private final CANdle candle = new CANdle(Constants.LedConstants.kCANdleId);
     private final CANdleConfiguration config;
-    private Animate currentAnimateCommand;
 
     public LedSubsystem() {
         // Set the default configuration
@@ -69,7 +68,7 @@ public class LedSubsystem extends SubsystemBase {
        for (CANdleColor color : colors) {
             int blockStartAddress = colorStartAddress;
 
-            while (blockStartAddress <= Constants.OIConstants.kNumLeds - 1) {
+            while (blockStartAddress <= Constants.LedConstants.kNumLeds - 1) {
                 setColor(color, blockStartAddress, colorBlockLength);
                 blockStartAddress += colorBlockLength * colors.length;
             }
@@ -86,7 +85,7 @@ public class LedSubsystem extends SubsystemBase {
     public void setPattern(CANdleColorBlock ... colorBlocks) {
         int blockStartAddress = 0;
 
-        while (blockStartAddress <= Constants.OIConstants.kNumLeds - 1) {
+        while (blockStartAddress <= Constants.LedConstants.kNumLeds - 1) {
             for (CANdleColorBlock colorBlock: colorBlocks) {
                 setColor(colorBlock, blockStartAddress);
                 blockStartAddress += colorBlock.getLength();
@@ -101,32 +100,5 @@ public class LedSubsystem extends SubsystemBase {
      */
     public void setPattern(CANdlePattern pattern) {
         setPattern(pattern.getPattern());
-    }
-
-    /**
-     * Scheduling Animate commands should only be done with this method. This and the .cancelAnimateCommand() are
-     * necessary because Animate commands do not ever finish or self-terminate; they only loop. 
-     * @param animateCommand the new Animate command to schedule
-     */
-    public void registerAnimateCommand(Animate animateCommand) {
-        if (currentAnimateCommand != null) {
-            currentAnimateCommand.cancel();
-        }
-
-        currentAnimateCommand = animateCommand;
-        currentAnimateCommand.schedule();
-    }
-
-    /**
-     * Cancels the current Animate command. This is necessary
-     * because Animate commands do not ever finish or self-terminate;
-     * they only loop.
-     */
-    public void cancelAnimateCommand() {
-        if (currentAnimateCommand != null) {
-            currentAnimateCommand.cancel();
-        }
-
-        currentAnimateCommand = null;
     }
 }

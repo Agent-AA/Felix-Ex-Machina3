@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LED.CANdleColor;
 import frc.robot.subsystems.LED.LedSubsystem;
 
 /**
@@ -33,7 +32,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Set the LEDs to red for disabled
-    m_robotLEDs.setSolidColor(new CANdleColor(255, 0, 0));
+    m_robotLEDs.setSolidColor(Constants.LedConstants.kRed);
   }
 
   /**
@@ -56,7 +55,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     // Set the LEDs to red for disabled
-    m_robotLEDs.setSolidColor(new CANdleColor(255, 0, 0));
+    m_robotLEDs.setSolidColor(Constants.LedConstants.kRed);
   }
 
   @Override

@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.LED.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -147,10 +148,25 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
+  }
 
+  public static final class LedConstants {
     public static final int kCANdleId = 17;
     public static final int kNumLeds = 128;
-  }
+
+    // Colors
+    public static final CANdleColor kBlack = new CANdleColor(0, 0, 0);
+    public static final CANdleColor kRed = new CANdleColor(255, 0, 0);
+    public static final CANdleColor kElectricBlue = new CANdleColor(125, 249, 255);
+
+    // Color Blocks
+    public static final CANdleColorBlock kEBlueBlock = new CANdleColorBlock(kElectricBlue, 2);
+    public static final CANdleColorBlock kBlackBlock = new CANdleColorBlock(kBlack, 1);
+
+    // Color Patterns
+    public static final CANdlePattern kEBlueDashed1 = new CANdlePattern(.25, kEBlueBlock, kBlackBlock);
+    public static final CANdlePattern kEBlueDashed2 = new CANdlePattern(.25, kBlackBlock, kEBlueBlock);
+}
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 4.0;

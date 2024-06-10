@@ -22,7 +22,7 @@ import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootingSubsystem;
 import frc.robot.subsystems.Drive.DriveSubsystem;
-import frc.robot.subsystems.LED.CANdleColor;
+import frc.robot.subsystems.LED.Animate;
 import frc.robot.subsystems.LED.LedSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -53,8 +53,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
+    // Configure the button bindings and other triggers
     configureButtonBindings();
+    configureOtherTriggers();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -87,8 +88,12 @@ public class RobotContainer {
         )
     );
 
-    // The LED subsystem has its own comprehensive set of commands
-    
+    m_robotLEDs.setDefaultCommand(
+        new RunCommand(
+            () -> m_robotLEDs.setSolidColor(Constants.LedConstants.kElectricBlue),
+            m_robotLEDs
+        )
+    );
   }
 
 
@@ -150,6 +155,17 @@ public class RobotContainer {
             m_robotClimbers
         ));
 
+  }
+
+  /**
+   * Use this method to configure additional command triggers that are not
+   * button-based.
+   */
+  private void configureOtherTriggers() {
+
+    // If the robot moves, set the LEDs to a dashed electric blue pattern
+    new Trigger(() -> m_robotDrive.getModuleSpeed() > 0)
+        .whileTrue(new Animate(m_robotLEDs, Constants.LedConstants.kEBlueDashed1, Constants.LedConstants.kEBlueDashed2));
   }
 
   /**

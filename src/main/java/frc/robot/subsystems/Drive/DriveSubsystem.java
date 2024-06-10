@@ -286,6 +286,16 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Returns the MAXSwerveModule's desired speed. Note, this isn't
+   * necessarily the actual lateral speed of the robot.
+   * 
+   * @return the desired SwerveModule speed
+   */
+  public double getModuleSpeed() {
+    return m_frontLeft.getDesiredState().speedMetersPerSecond;
+  }
+
+  /**
    * Returns the max speed of the robot from Shuffleboard. This must be a function because
    * the value changes in live time.
    * 

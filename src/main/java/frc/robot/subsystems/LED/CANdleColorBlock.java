@@ -17,6 +17,11 @@ public class CANdleColorBlock extends CANdleColor {
         this.length = length;
     }
 
+    public CANdleColorBlock(CANdleColor color, int length) {
+        super(color.getr(), color.getg(), color.getb(), color.getw());
+        this.length = length;
+    }
+
     /**
      * Returns the length (number of LEDs for that color when in a pattern) for the color block
      * 
