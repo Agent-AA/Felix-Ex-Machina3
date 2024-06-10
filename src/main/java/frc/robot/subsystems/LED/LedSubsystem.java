@@ -15,6 +15,7 @@ public class LedSubsystem extends SubsystemBase {
     // Our LED strip
     private final CANdle candle = new CANdle(Constants.OIConstants.kCANdleId);
     private final CANdleConfiguration config;
+    private Animate currentAnimateCommand;
 
     public LedSubsystem() {
         // Set the default configuration
@@ -100,5 +101,32 @@ public class LedSubsystem extends SubsystemBase {
      */
     public void setPattern(CANdlePattern pattern) {
         setPattern(pattern.getPattern());
+    }
+
+    /**
+     * Scheduling Animate commands should only be done with this method. This and the .cancelAnimateCommand() are
+     * necessary because Animate commands do not ever finish or self-terminate; they only loop. 
+     * @param animateCommand the new Animate command to schedule
+     */
+    public void registerAnimateCommand(Animate animateCommand) {
+        if (currentAnimateCommand != null) {
+            currentAnimateCommand.cancel();
+        }
+
+        currentAnimateCommand = animateCommand;
+        currentAnimateCommand.schedule();
+    }
+
+    /**
+     * Cancels the current Animate command. This is necessary
+     * because Animate commands do not ever finish or self-terminate;
+     * they only loop.
+     */
+    public void cancelAnimateCommand() {
+        if (currentAnimateCommand != null) {
+            currentAnimateCommand.cancel();
+        }
+
+        currentAnimateCommand = null;
     }
 }

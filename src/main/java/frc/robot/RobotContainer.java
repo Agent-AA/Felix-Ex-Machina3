@@ -88,11 +88,7 @@ public class RobotContainer {
     );
 
     // The LED subsystem has its own comprehensive set of commands
-    m_robotLEDs.setDefaultCommand(
-        new RunCommand(
-            () -> m_robotLEDs.setSolidColor(new CANdleColor(125, 249, 255)), // electric blue
-             m_robotLEDs)
-    );
+    
   }
 
 
