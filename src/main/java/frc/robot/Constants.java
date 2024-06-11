@@ -157,7 +157,7 @@ public final class Constants {
     // Colors
     public static final CANdleColor kBlack = new CANdleColor(0, 0, 0);
     public static final CANdleColor kRed = new CANdleColor(255, 0, 0);
-    public static final CANdleColor kElectricBlue = new CANdleColor(125, 249, 255);
+    public static final CANdleColor kElectricBlue = new CANdleColor(0, 82, 130);
     public static final CANdleColor kElectricYellow = new CANdleColor(255, 255, 51);
 
     // Color Blocks

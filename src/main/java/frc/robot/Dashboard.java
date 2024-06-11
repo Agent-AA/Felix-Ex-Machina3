@@ -99,5 +99,40 @@ public class Dashboard {
             .withPosition(5,1)
             .withSize(2, 1)
             .getEntry();
+
+        // RGB color scheme layout
+        public static final ShuffleboardLayout colorPickerLayout = mainTab
+            .getLayout("RGBW Color Adjuster", BuiltInLayouts.kList)
+            .withSize(2,4)
+            .withPosition(7,0)
+            .withProperties(Map.of("Label Position", "HIDDEN"));
+
+            public static final GenericEntry rEntry = colorPickerLayout
+            .add("R", LedConstants.kElectricBlue.getr())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
+            .getEntry();
+
+            public static final GenericEntry gEntry = colorPickerLayout
+            .add("G", LedConstants.kElectricBlue.getg())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
+            .getEntry();
+
+            public static final GenericEntry bEntry = colorPickerLayout
+            .add("B", LedConstants.kElectricBlue.getb())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
+            .getEntry();
+
+            public static final GenericEntry wEntry = colorPickerLayout
+            .add("W", LedConstants.kElectricBlue.getw())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
+            .getEntry();
     }
 }

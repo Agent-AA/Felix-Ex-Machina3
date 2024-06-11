@@ -23,6 +23,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootingSubsystem;
 import frc.robot.subsystems.Drive.DriveSubsystem;
 import frc.robot.subsystems.LED.Animate;
+import frc.robot.subsystems.LED.CANdleColor;
 import frc.robot.subsystems.LED.LedSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -90,7 +91,7 @@ public class RobotContainer {
 
     m_robotLEDs.setDefaultCommand(
         new RunCommand(
-            () -> m_robotLEDs.setSolidColor(Constants.LedConstants.kElectricBlue),
+            () -> m_robotLEDs.setSolidColor(new CANdleColor((int) Dashboard.MainTab.rEntry.getInteger(0), (int) Dashboard.MainTab.gEntry.getInteger(0), (int) Dashboard.MainTab.bEntry.getInteger(0), (int) Dashboard.MainTab.wEntry.getInteger(0))),
             m_robotLEDs
         )
     );
