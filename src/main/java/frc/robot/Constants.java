@@ -174,7 +174,7 @@ public final class Constants {
     public static final CANdlePattern kEBlueDashed2 = new CANdlePattern(.25, kBlackBlock, kEBlueBlock);
 
     // The next three patterns are quite verbose, but right now, I couldn't think of a better way to do it.
-    public static final CANdlePattern kYellowDashed1 = new CANdlePattern(.25, 
+    public static final CANdlePattern kYellowDashed1 = new CANdlePattern(.10, 
       kBlackBlock, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
@@ -190,7 +190,7 @@ public final class Constants {
 
     // This pattern is nearly identical to the previous one, but the first and last
     // blocks of each of the two sections are different
-    public static final CANdlePattern kYellowDashed2 = new CANdlePattern(.25,
+    public static final CANdlePattern kYellowDashed2 = new CANdlePattern(.10,
       kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
@@ -204,7 +204,7 @@ public final class Constants {
       k3Yellow, kDoubleBlack
     );
 
-    public static final CANdlePattern kYellowDashed3 = new CANdlePattern(.25,
+    public static final CANdlePattern kYellowDashed3 = new CANdlePattern(.10,
       kYellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
@@ -218,7 +218,7 @@ public final class Constants {
       k3Yellow, kDoubleBlack, kYellow
     );
 
-    public static final CANdlePattern kYellowDashed4 = new CANdlePattern(.25,
+    public static final CANdlePattern kYellowDashed4 = new CANdlePattern(.10,
       k2Yellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
@@ -232,7 +232,7 @@ public final class Constants {
       k3Yellow, kDoubleBlack, k2Yellow
     );
 
-    public static final CANdlePattern kYellowDashed5 = new CANdlePattern(.25,
+    public static final CANdlePattern kYellowDashed5 = new CANdlePattern(.10,
       k3Yellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
       kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,

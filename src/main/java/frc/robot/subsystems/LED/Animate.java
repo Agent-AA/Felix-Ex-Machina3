@@ -33,25 +33,22 @@ public class Animate extends Command {
 
         // Timestamp the change
         lastChange = System.currentTimeMillis();
-
-        // Increment the index and wrap to beginning if needed
-        index = (index + 1) % patterns.length;
     }
 
     @Override
     public void execute() {
 
         // If the pattern has been displayed for its requested duration,
-        if (System.currentTimeMillis() - lastChange >= patterns[index - 1].getFrameDelay() * 1000) {
+        if (System.currentTimeMillis() - lastChange >= patterns[index].getFrameDelay() * 1000) {
 
-            // Set the next pattern
+            // Move to the next pattern index
+            index = (index + 1) % patterns.length;
+
+            // Set the pattern
             robotLEDs.setPattern(patterns[index]);
 
             // Timestamp the change
             lastChange = System.currentTimeMillis();
-
-            // Increment the index and wrap to beginning if needed
-            index = (index + 1) % patterns.length;
         }
     }
 
