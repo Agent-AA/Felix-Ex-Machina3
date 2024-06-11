@@ -166,7 +166,16 @@ public class RobotContainer {
     // If the robot moves, set the LEDs to a dashed electric blue pattern
     new Trigger(() -> m_robotDrive.getModuleSpeed() > 0)
         .whileTrue(new Animate(m_robotLEDs, Constants.LedConstants.kEBlueDashed1, Constants.LedConstants.kEBlueDashed2));
+
+    // If the robot is raising its climbers, set the LEDs to a yellow dashed "up" pattern
+    new Trigger(() -> m_robotClimbers.getMovement() == 1)
+        .whileTrue(new Animate(m_robotLEDs, Constants.LedConstants.kYellowDashed5, Constants.LedConstants.kYellowDashed4, Constants.LedConstants.kYellowDashed3, Constants.LedConstants.kYellowDashed2, Constants.LedConstants.kYellowDashed1));
+
+    // If the robot is lowering its climbers, set the LEDs to a yellow dashed "down" pattern
+    new Trigger(() -> m_robotClimbers.getMovement() == -1)
+        .whileTrue(new Animate(m_robotLEDs, Constants.LedConstants.kYellowDashed1, Constants.LedConstants.kYellowDashed2, Constants.LedConstants.kYellowDashed3, Constants.LedConstants.kYellowDashed4, Constants.LedConstants.kYellowDashed5));
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -158,14 +158,93 @@ public final class Constants {
     public static final CANdleColor kBlack = new CANdleColor(0, 0, 0);
     public static final CANdleColor kRed = new CANdleColor(255, 0, 0);
     public static final CANdleColor kElectricBlue = new CANdleColor(125, 249, 255);
+    public static final CANdleColor kElectricYellow = new CANdleColor(255, 255, 51);
 
     // Color Blocks
     public static final CANdleColorBlock kEBlueBlock = new CANdleColorBlock(kElectricBlue, 2);
     public static final CANdleColorBlock kBlackBlock = new CANdleColorBlock(kBlack, 1);
+    public static final CANdleColorBlock kDoubleBlack = new CANdleColorBlock(kBlack, 2);
+
+    public static final CANdleColorBlock k3Yellow = new CANdleColorBlock(kElectricYellow, 3);
+    public static final CANdleColorBlock k2Yellow = new CANdleColorBlock(kElectricYellow, 2);
+    public static final CANdleColorBlock kYellow = new CANdleColorBlock(kElectricYellow, 1);
 
     // Color Patterns
     public static final CANdlePattern kEBlueDashed1 = new CANdlePattern(.25, kEBlueBlock, kBlackBlock);
     public static final CANdlePattern kEBlueDashed2 = new CANdlePattern(.25, kBlackBlock, kEBlueBlock);
+
+    // The next three patterns are quite verbose, but right now, I couldn't think of a better way to do it.
+    public static final CANdlePattern kYellowDashed1 = new CANdlePattern(.25, 
+      kBlackBlock, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kBlackBlock
+      );
+
+    // This pattern is nearly identical to the previous one, but the first and last
+    // blocks of each of the two sections are different
+    public static final CANdlePattern kYellowDashed2 = new CANdlePattern(.25,
+      kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k2Yellow,
+
+      k2Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack
+    );
+
+    public static final CANdlePattern kYellowDashed3 = new CANdlePattern(.25,
+      kYellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, kYellow,
+
+      kYellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, kYellow
+    );
+
+    public static final CANdlePattern kYellowDashed4 = new CANdlePattern(.25,
+      k2Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+
+                kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k2Yellow
+    );
+
+    public static final CANdlePattern kYellowDashed5 = new CANdlePattern(.25,
+      k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow,
+      kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kBlackBlock,
+
+                kBlackBlock, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack, k3Yellow, kDoubleBlack,
+      k3Yellow, kDoubleBlack, k3Yellow
+    );
 }
 
   public static final class AutoConstants {
