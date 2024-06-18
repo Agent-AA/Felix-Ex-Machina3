@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -121,14 +121,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Update MAXSwerveModule PID values from Shuffleboard
     setDrivingPIDValues(new double[] {
-      Dashboard.DriveTab.drivePEntry.getDouble(ModuleConstants.kDrivingP),
-      Dashboard.DriveTab.driveIEntry.getDouble(ModuleConstants.kDrivingI),
-      Dashboard.DriveTab.driveDEntry.getDouble(ModuleConstants.kDrivingD)
+      Dashboard.MainTab.drivePEntry.getDouble(ModuleConstants.kDrivingP),
+      Dashboard.MainTab.driveIEntry.getDouble(ModuleConstants.kDrivingI),
+      Dashboard.MainTab.driveDEntry.getDouble(ModuleConstants.kDrivingD)
     });
     setTurningPIDValues(new double[] {
-      Dashboard.DriveTab.turnPEntry.getDouble(ModuleConstants.kTurningP),
-      Dashboard.DriveTab.turnIEntry.getDouble(ModuleConstants.kTurningI),
-      Dashboard.DriveTab.turnDEntry.getDouble(ModuleConstants.kTurningD)
+      Dashboard.MainTab.turnPEntry.getDouble(ModuleConstants.kTurningP),
+      Dashboard.MainTab.turnIEntry.getDouble(ModuleConstants.kTurningI),
+      Dashboard.MainTab.turnDEntry.getDouble(ModuleConstants.kTurningD)
     });
   }
 
@@ -286,13 +286,23 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Returns the MAXSwerveModule's desired speed. Note, this isn't
+   * necessarily the actual lateral speed of the robot.
+   * 
+   * @return the desired SwerveModule speed
+   */
+  public double getModuleSpeed() {
+    return m_frontLeft.getDesiredState().speedMetersPerSecond;
+  }
+
+  /**
    * Returns the max speed of the robot from Shuffleboard. This must be a function because
    * the value changes in live time.
    * 
    * @return the max driving speed of the robot (m/s)
    */
   public double getMaxDrivingSpeed() {
-    return Dashboard.DriveTab.maxSpeedEntry.getDouble(DriveConstants.kMaxSpeedMetersPerSecond);
+    return Dashboard.MainTab.maxSpeedEntry.getDouble(DriveConstants.kMaxSpeedMetersPerSecond);
   }
 
   /**

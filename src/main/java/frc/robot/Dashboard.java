@@ -18,11 +18,11 @@ import frc.robot.Constants.*;
  */
 public class Dashboard {
     
-    public static class DriveTab {
-        public static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+    public static class MainTab {
+        public static final ShuffleboardTab mainTab = Shuffleboard.getTab("Main");
 
         // MAX SPEED CONTROLLER
-        public static final GenericEntry maxSpeedEntry = driveTab
+        public static final GenericEntry maxSpeedEntry = mainTab
             .add("Max Speed", DriveConstants.kMaxSpeedMetersPerSecond)
             .withSize(4,1)
             .withPosition(0,0) // top left corner
@@ -31,10 +31,10 @@ public class Dashboard {
             .getEntry();
 
         // DRIVING PID CONTROLLER LAYOUT
-        public static final ShuffleboardLayout drivePIDLayout = driveTab
+        public static final ShuffleboardLayout drivePIDLayout = mainTab
             .getLayout("Drive PID", BuiltInLayouts.kList)
             .withSize(2,3)
-            .withPosition(0,0) // top left corner
+            .withPosition(0,1) // top left corner, below max drive speed
             .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
             // Driving PIDController entries
@@ -57,7 +57,7 @@ public class Dashboard {
                 .getEntry();
 
         // TURNING PID CONTROLLER LAYOUT
-        public static final ShuffleboardLayout turnPIDLayout = driveTab
+        public static final ShuffleboardLayout turnPIDLayout = mainTab
             .getLayout("Turn PID", BuiltInLayouts.kList)
             .withSize(2,3)
             .withPosition(2,1) // to the right of the drive PID and under max speed controller
@@ -83,12 +83,56 @@ public class Dashboard {
                 .getEntry();
         
         // Shooting speed entry
-        public static final GenericEntry shootingSpeedEntry = driveTab
-            .add("Shooting Speed", ShootingConstants.kdefaultShootSpeed)
+        public static final GenericEntry shootingSpeedEntry = mainTab
+            .add("Shooting Speed", ShootingConstants.kDefaultShootSpeed)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1))
             .withPosition(5,0)
             .withSize(2,1)
+            .getEntry();
+
+        // Climbing speed entry
+        public static final GenericEntry climbingSpeedEntry = mainTab
+            .add("Climbing Speed", ClimbConstants.kDefaultClimbSpeed)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
+            .withPosition(5,1)
+            .withSize(2, 1)
+            .getEntry();
+
+        // RGB color scheme layout
+        public static final ShuffleboardLayout colorPickerLayout = mainTab
+            .getLayout("RGBW Color Adjuster", BuiltInLayouts.kList)
+            .withSize(2,4)
+            .withPosition(7,0)
+            .withProperties(Map.of("Label Position", "HIDDEN"));
+
+            public static final GenericEntry rEntry = colorPickerLayout
+            .add("R", LedConstants.kElectricBlue.getr())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
+            .getEntry();
+
+            public static final GenericEntry gEntry = colorPickerLayout
+            .add("G", LedConstants.kElectricBlue.getg())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
+            .getEntry();
+
+            public static final GenericEntry bEntry = colorPickerLayout
+            .add("B", LedConstants.kElectricBlue.getb())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
+            .getEntry();
+
+            public static final GenericEntry wEntry = colorPickerLayout
+            .add("W", LedConstants.kElectricBlue.getw())
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withSize(2,1)
+            .withProperties(Map.of("min",0,"max",255, "block increment", 1))
             .getEntry();
     }
 }

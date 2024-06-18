@@ -19,10 +19,12 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ClimbingSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShootingSubsystem;
+import frc.robot.subsystems.Drive.DriveSubsystem;
+import frc.robot.subsystems.LED.Animate;
+import frc.robot.subsystems.LED.CANdleColor;
+import frc.robot.subsystems.LED.LedSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -40,8 +42,7 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  @SuppressWarnings("unused")
-  private final LedSubsystem m_robotLEDs = new LedSubsystem();
+  protected final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
   private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
   private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
   private final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
@@ -53,8 +54,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
+    // Configure the button bindings and other triggers
     configureButtonBindings();
+    configureOtherTriggers();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -84,6 +86,13 @@ public class RobotContainer {
         new RunCommand(
             () -> m_robotClimbers.stopClimbers(),
             m_robotClimbers
+        )
+    );
+
+    m_robotLEDs.setDefaultCommand(
+        new RunCommand(
+            () -> m_robotLEDs.setSolidColor(new CANdleColor((int) Dashboard.MainTab.rEntry.getInteger(0), (int) Dashboard.MainTab.gEntry.getInteger(0), (int) Dashboard.MainTab.bEntry.getInteger(0), (int) Dashboard.MainTab.wEntry.getInteger(0))),
+            m_robotLEDs
         )
     );
   }
@@ -148,6 +157,26 @@ public class RobotContainer {
         ));
 
   }
+
+  /**
+   * Use this method to configure additional command triggers that are not
+   * button-based.
+   */
+  private void configureOtherTriggers() {
+
+    // If the robot moves, set the LEDs to a dashed electric blue pattern
+    new Trigger(() -> m_robotDrive.getModuleSpeed() > 0)
+        .whileTrue(new Animate(m_robotLEDs, Constants.LedConstants.kEBlueDashed1, Constants.LedConstants.kEBlueDashed2));
+
+    // If the robot is raising its climbers, set the LEDs to a yellow dashed "up" pattern
+    new Trigger(() -> m_robotClimbers.getMovement() == 1)
+        .whileTrue(new Animate(m_robotLEDs, Constants.LedConstants.kYellowDashed5, Constants.LedConstants.kYellowDashed4, Constants.LedConstants.kYellowDashed3, Constants.LedConstants.kYellowDashed2, Constants.LedConstants.kYellowDashed1));
+
+    // If the robot is lowering its climbers, set the LEDs to a yellow dashed "down" pattern
+    new Trigger(() -> m_robotClimbers.getMovement() == -1)
+        .whileTrue(new Animate(m_robotLEDs, Constants.LedConstants.kYellowDashed1, Constants.LedConstants.kYellowDashed2, Constants.LedConstants.kYellowDashed3, Constants.LedConstants.kYellowDashed4, Constants.LedConstants.kYellowDashed5));
+  }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
