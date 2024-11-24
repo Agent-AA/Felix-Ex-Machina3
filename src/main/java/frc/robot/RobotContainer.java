@@ -42,12 +42,12 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  protected final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
-  private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
-  private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
-  private final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
-  private final VisionSubsystem m_robotVision = new VisionSubsystem();
+  public static final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  protected static final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
+  private static final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
+  private static final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
+  private static final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
+  public static final VisionSubsystem m_robotVision = new VisionSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
