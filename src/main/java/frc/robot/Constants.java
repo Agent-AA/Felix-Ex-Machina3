@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.LED.*;
 
 /**
@@ -268,5 +269,6 @@ public final class Constants {
 
   public static final class VisionConstants {
     public static final String VISION_CAMERA_NAME = "Arducam_OV2311_USB_Camera";
+    public static final String FIELD_LAYOUT_PATH = Filesystem.getDeployDirectory().toString() + "/2024-crescendo.json";
   }
 }
