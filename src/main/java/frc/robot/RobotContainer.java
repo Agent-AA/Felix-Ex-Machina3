@@ -21,6 +21,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootingSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Drive.DriveSubsystem;
 import frc.robot.subsystems.LED.Animate;
 import frc.robot.subsystems.LED.CANdleColor;
@@ -41,11 +42,12 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  protected final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
-  private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
-  private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
-  private final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
+  public static final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  protected static final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
+  private static final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
+  private static final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
+  private static final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
+  public static final VisionSubsystem m_robotVision = new VisionSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
