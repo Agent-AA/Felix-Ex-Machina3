@@ -1,5 +1,11 @@
 package frc.robot.subsystems;
 
+import java.util.List;
+
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -8,4 +14,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class VisionSubsystem extends SubsystemBase{
     
+    private final PhotonCamera camera = new PhotonCamera("Arducam_OV2311_USB_Camera");
+    private PhotonPipelineResult result;
+
+    @Override
+    public void periodic() {
+        // Periodically updates the pipeline results from the Arducam
+        result = camera.getLatestResult();
+    }
+
+    public boolean aprilTagsVisible() {
+        return result.hasTargets();
+    }
+
+    public List<PhotonTrackedTarget> getAprilTags() {
+        return result.getTargets();
+    }
 }

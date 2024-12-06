@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoAim;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootingSubsystem;
@@ -110,11 +111,9 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    // X-lock while right bumper is engaged
+    // Automatically aim the robot towards the aprilTag with ID 1, if visible
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+        .whileTrue(new AutoAim(1));
 
     // Reverse shooter and intake while left bumper is engaged
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
