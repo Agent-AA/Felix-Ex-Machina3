@@ -265,4 +265,8 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final class VisionConstants {
+    public static final String VISION_CAMERA_NAME = "Arducam_OV2311_USB_Camera";
+  }
 }
