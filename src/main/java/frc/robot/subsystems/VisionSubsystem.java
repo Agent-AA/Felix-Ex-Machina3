@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class VisionSubsystem extends SubsystemBase{
     
-    private final PhotonCamera camera = new PhotonCamera("Arducam_OV2311_USB_Camera");
+    private final PhotonCamera camera = new PhotonCamera("camera0");
     private PhotonPipelineResult result;
 
     @Override

@@ -32,6 +32,7 @@ public class AutoAim extends Command {
         forward = -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband);
         strafe = -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband);
         turn = -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband);
+        targetYaw = 0.0;
 
         // Read relevant data from VisionSubsystem
         if (m_robotVision.aprilTagsVisible()) {
@@ -48,7 +49,7 @@ public class AutoAim extends Command {
         // If target aprilTag is seen
         if (targetVisible) {
             // Auto-align to target
-            turn = -1.0 * targetYaw * Constants.ModuleConstants.kTurningP * Constants.DriveConstants.kMaxAngularSpeed;
+            turn = targetYaw * Constants.ModuleConstants.kTurningP * Constants.DriveConstants.kMaxAngularSpeed;
             m_robotDrive.drive(forward, strafe, turn, true, true);
         }
     }
