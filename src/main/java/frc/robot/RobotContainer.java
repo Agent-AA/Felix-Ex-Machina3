@@ -51,7 +51,7 @@ public class RobotContainer {
   public static final VisionSubsystem m_robotVision = new VisionSubsystem();
 
   // The driver's controller
-  public static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
