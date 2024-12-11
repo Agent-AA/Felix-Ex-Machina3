@@ -47,10 +47,10 @@ public class AutoAim extends Command {
         } else {targetVisible = false;}
 
         // If target aprilTag is seen
-        if (targetVisible) {
+        if (targetVisible && Math.abs(targetYaw) > 5.0) {
             // Auto-align to target
             turn = targetYaw * Constants.ModuleConstants.kTurningP * Constants.DriveConstants.kMaxAngularSpeed;
-            m_robotDrive.drive(forward, strafe, turn, true, true);
+            m_robotDrive.drive(forward, strafe, turn, true, false);
         }
     }
 }
