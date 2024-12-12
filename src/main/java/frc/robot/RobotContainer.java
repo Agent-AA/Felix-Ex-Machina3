@@ -18,9 +18,11 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoAim;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootingSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Drive.DriveSubsystem;
 import frc.robot.subsystems.LED.Animate;
 import frc.robot.subsystems.LED.CANdleColor;
@@ -41,14 +43,15 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  protected final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
-  private final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
-  private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
-  private final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
+  public static final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  protected static final LedSubsystem m_robotLEDs = new LedSubsystem(); // protected so it can be used by robot.java
+  private static final ShootingSubsystem m_robotShooter = new ShootingSubsystem();
+  private static final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
+  private static final ClimbingSubsystem m_robotClimbers = new ClimbingSubsystem();
+  public static final VisionSubsystem m_robotVision = new VisionSubsystem();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -108,11 +111,9 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    // X-lock while right bumper is engaged
+    // Automatically aim the robot towards the aprilTag with ID 1, if visible
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+        .whileTrue(new AutoAim(1));
 
     // Reverse shooter and intake while left bumper is engaged
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
