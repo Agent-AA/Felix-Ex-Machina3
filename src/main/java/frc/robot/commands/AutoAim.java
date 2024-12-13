@@ -18,12 +18,20 @@ public class AutoAim extends Command {
     private final VisionSubsystem m_robotVision = RobotContainer.m_robotVision;
     private final int aprilTagId;
 
+    private final double yawTolerance;
     private double forward, strafe, turn, targetYaw;
     private boolean targetVisible;
 
-    public AutoAim(int aprilTagId) {
+    /**
+     * Constructs a new AutoAim command.
+     * 
+     * @param aprilTagId the ID of the aprilTag to recognize and aim at. This command will *only* work for this tag.
+     * @param yawTolerance the maximum error (in degrees, we think), to tolerate being off by. Otherwise, the robot will correct itself.
+     */
+    public AutoAim(int aprilTagId, double yawTolerance) {
         addRequirements(RobotContainer.m_robotDrive, RobotContainer.m_robotVision);
         this.aprilTagId = aprilTagId;
+        this.yawTolerance = yawTolerance;
     }
 
     @Override
@@ -47,10 +55,19 @@ public class AutoAim extends Command {
         } else {targetVisible = false;}
 
         // If target aprilTag is seen
-        if (targetVisible && Math.abs(targetYaw) > 5.0) {
+        if (targetVisible && Math.abs(targetYaw) > yawTolerance) {
             // Auto-align to target
-            turn = targetYaw * Constants.ModuleConstants.kTurningP * Constants.DriveConstants.kMaxAngularSpeed;
+            turn = targetYaw * Constants.ModuleConstants.kTurningP * Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond;
             m_robotDrive.drive(forward, strafe, turn, true, false);
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        if (!targetVisible || Math.abs(targetYaw) < yawTolerance) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

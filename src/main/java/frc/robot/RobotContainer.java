@@ -113,7 +113,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Automatically aim the robot towards the aprilTag with ID 1, if visible
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whileTrue(new AutoAim(1));
+        .whileTrue(new AutoAim(1, .5));
 
     // Reverse shooter and intake while left bumper is engaged
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
