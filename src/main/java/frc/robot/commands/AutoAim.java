@@ -29,7 +29,7 @@ public class AutoAim extends Command {
      * @param yawTolerance the maximum error (in degrees, we think), to tolerate being off by. Otherwise, the robot will correct itself.
      */
     public AutoAim(int aprilTagId, double yawTolerance) {
-        addRequirements(RobotContainer.m_robotDrive, RobotContainer.m_robotVision);
+        addRequirements(m_robotDrive, m_robotVision);
         this.aprilTagId = aprilTagId;
         this.yawTolerance = yawTolerance;
     }
